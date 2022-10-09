@@ -1,5 +1,6 @@
 package org.yzr.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -9,12 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yzr.backend.common.R;
 import org.yzr.model.User;
 import org.yzr.service.AppService;
 import org.yzr.utils.file.PathManager;
 import org.yzr.utils.response.BaseResponse;
 import org.yzr.utils.response.ResponseUtil;
 import org.yzr.vo.AppViewModel;
+import org.yzr.vo.PackageViewModel;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +57,20 @@ public class AppController {
         request.setAttribute("package", appViewModel);
         request.setAttribute("apps", appViewModel.getPackageList());
         return "list";
+    }
+
+    @RequiresPermissions("/apps/get")
+    @GetMapping("/dish/page")
+    @ResponseBody
+    public R<Page<PackageViewModel>> getAppList(HttpServletRequest request) {
+        Subject currentUser = SecurityUtils.getSubject();
+        User user = (User) currentUser.getPrincipal();
+        AppViewModel appViewModel = this.appService.getById("4028818383bcccfa0183bccd41a80003", user, request);
+//        request.setAttribute("package", appViewModel);
+//        request.setAttribute("apps", appViewModel.getPackageList());
+        Page<PackageViewModel> pageInfo = new Page<>(1, 10);
+        pageInfo.setRecords(appViewModel.getPackageList());
+        return R.success(pageInfo);
     }
 
     @RequiresPermissions("/packageList/get")

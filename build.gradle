@@ -41,6 +41,11 @@ dependencies {
     implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.28'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
     implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.59'
+    implementation group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.4.2'
+    // lombok，编译有效，打包无效
+    compileOnly 'org.projectlombok:lombok'
+    // gradle 5.0以上版本注解处理不再compile classpath，需要增加 annotation processor path
+    annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
