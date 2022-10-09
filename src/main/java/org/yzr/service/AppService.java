@@ -215,6 +215,7 @@ public class AppService {
         // 2.1 源文件
         File sourceFile = new File(filePath);
         Storage storage = storageUtil.store(new FileInputStream(sourceFile), sourceFile.length(), "application/octet-stream", sourceFile.getName());
+        System.gc();
         FileUtils.forceDelete(sourceFile);
         aPackage.setSourceFile(storage);
         // 2.2 图标文件
@@ -222,6 +223,7 @@ public class AppService {
         ImageUtils.resize(aPackage.getIconFile().getUrl(), iconFilePath, 192, 192);
         File iconFile = new File(iconFilePath);
         Storage iconStorage = storageUtil.store(new FileInputStream(iconFile), iconFile.length(), "application/png", iconFile.getName());
+        System.gc();
         FileUtils.forceDelete(new File(aPackage.getIconFile().getUrl()));
         FileUtils.forceDelete(iconFile);
         aPackage.setIconFile(iconStorage);
