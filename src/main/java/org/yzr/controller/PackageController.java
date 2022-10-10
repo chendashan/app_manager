@@ -19,10 +19,7 @@ import org.yzr.model.App;
 import org.yzr.model.Package;
 import org.yzr.model.Storage;
 import org.yzr.model.User;
-import org.yzr.service.AppService;
-import org.yzr.service.PackageService;
-import org.yzr.service.StorageService;
-import org.yzr.service.UserService;
+import org.yzr.service.*;
 import org.yzr.storage.StorageUtil;
 import org.yzr.utils.file.PathManager;
 import org.yzr.utils.image.QRCodeUtil;
@@ -56,6 +53,9 @@ public class PackageController {
     private StorageUtil storageUtil;
     @Resource
     private StorageService storageService;
+
+    @Resource
+    private TbPackageService tbPackageService;
 
     /**
      * 预览页
