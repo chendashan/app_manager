@@ -2,21 +2,20 @@ package org.yzr.service;
 
 
 import org.springframework.stereotype.Service;
-import org.yzr.dao.AppDao;
 import org.yzr.dao.PackageDao;
 import org.yzr.dao.StorageDao;
-import org.yzr.dao.UserDao;
 import org.yzr.model.Package;
 import org.yzr.model.Storage;
 import org.yzr.model.User;
 import org.yzr.storage.StorageUtil;
-import org.yzr.utils.file.PathManager;
 import org.yzr.utils.parser.ParserClient;
 import org.yzr.vo.PackageViewModel;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -41,6 +40,17 @@ public class PackageService {
         aPackage.getApp().getOwner().getId();
         aPackage.getSourceFile().getKey();
         return aPackage;
+    }
+
+    @Transactional
+    public List<PackageViewModel> getAll(HttpServletRequest request) {
+        Iterable<Package> packageIterable = this.packageDao.findAll();
+        List<PackageViewModel> list = new ArrayList<>();
+        for (Package pg : packageIterable) {
+            PackageViewModel viewModel = new PackageViewModel(pg, request);
+            list.add(viewModel);
+        }
+        return list;
     }
 
     @Transactional

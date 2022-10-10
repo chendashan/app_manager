@@ -66,22 +66,21 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="version"
-          label="版本"
+          prop="bundleID"
+          label="包名"
         ></el-table-column>
-        <el-table-column label="售价">
+        <el-table-column label="版本">
           <template slot-scope="scope">
-            <span style="margin-right: 10px;">￥{{ scope.row.price/100 }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="售卖状态">
-          <template slot-scope="scope">
-            <span style="margin-right: 10px;">{{ scope.row.status == '0' ? '停售' : '启售' }}</span>
+            <span style="margin-right: 10px;">v{{ scope.row.version }}</span>
           </template>
         </el-table-column>
         <el-table-column
+            prop="displaySize"
+            label="大小">
+        </el-table-column>
+        <el-table-column
           prop="displayTime"
-          label="最后操作时间"
+          label="发布时间"
         >
         </el-table-column>
         <el-table-column

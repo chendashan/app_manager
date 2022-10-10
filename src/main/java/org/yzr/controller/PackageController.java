@@ -1,6 +1,7 @@
 package org.yzr.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.yzr.backend.common.R;
 import org.yzr.model.App;
 import org.yzr.model.Package;
 import org.yzr.model.Storage;
@@ -38,6 +40,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -256,6 +259,19 @@ public class PackageController {
             map.put("success", false);
         }
         return map;
+    }
+
+    @RequiresPermissions("/apps/get")
+    @GetMapping("/dish/page")
+    @ResponseBody
+    public R<Page<PackageViewModel>> getAppList(HttpServletRequest request) {
+
+        List<PackageViewModel> packageList = this.packageService.getAll(request);
+//        request.setAttribute("package", appViewModel);
+//        request.setAttribute("apps", appViewModel.getPackageList());
+        Page<PackageViewModel> pageInfo = new Page<>(1, 10);
+        pageInfo.setRecords(packageList);
+        return R.success(pageInfo);
     }
 
 }

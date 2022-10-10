@@ -59,19 +59,7 @@ public class AppController {
         return "list";
     }
 
-    @RequiresPermissions("/apps/get")
-    @GetMapping("/dish/page")
-    @ResponseBody
-    public R<Page<PackageViewModel>> getAppList(HttpServletRequest request) {
-        Subject currentUser = SecurityUtils.getSubject();
-        User user = (User) currentUser.getPrincipal();
-        AppViewModel appViewModel = this.appService.getById("4028818383bcccfa0183bccd41a80003", user, request);
-//        request.setAttribute("package", appViewModel);
-//        request.setAttribute("apps", appViewModel.getPackageList());
-        Page<PackageViewModel> pageInfo = new Page<>(1, 10);
-        pageInfo.setRecords(appViewModel.getPackageList());
-        return R.success(pageInfo);
-    }
+
 
     @RequiresPermissions("/packageList/get")
     @RequestMapping("/packageList/{appID}")
