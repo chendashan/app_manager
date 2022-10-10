@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.StringUtils;
 import org.yzr.model.Package;
+import org.yzr.model.TbPackage;
 import org.yzr.utils.date.DateUtil;
 import org.yzr.utils.file.PathManager;
 
@@ -102,7 +103,32 @@ public class PackageViewModel {
         this.message = message;
         try {
             this.iconURL = httpsURL + "/fetch/" + aPackage.getIconFile().getKey();
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
+    }
+
+    public PackageViewModel(TbPackage aPackage) {
+        this.id = aPackage.getId();
+        this.version = aPackage.getVersion();
+        this.bundleID = aPackage.getBundleId();
+        this.name = aPackage.getName();
+        this.createTime = aPackage.getCreateTime();
+        this.buildVersion = aPackage.getBuildVersion();
+        //this.iconKey = aPackage.getIconFile().getKey();
+        this.displaySize = String.format("%.2f MB", aPackage.getSize() / (1.0F * FileUtils.ONE_MB));
+        Date updateTime = new Date(this.createTime);
+        String displayTime = (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(updateTime);
+        this.displayTime = displayTime;
+        if (aPackage.getPlatform().equals("ios")) {
+            this.iOS = true;
+        } else if (aPackage.getPlatform().equals("android")) {
+            this.iOS = false;
+        }
+
+        try {
+            //this.iconURL = httpsURL + "/fetch/" + aPackage.getIconFile().getKey();
+        } catch (Exception e) {
+        }
     }
 
     public String getDownloadURL() {
@@ -115,6 +141,10 @@ public class PackageViewModel {
 
     public String getIconURL() {
         return iconURL;
+    }
+
+    public void setIconURL(String iconURL) {
+        this.iconURL = iconURL;
     }
 
     public String getInstallURL() {

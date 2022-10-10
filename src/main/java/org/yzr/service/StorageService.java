@@ -22,4 +22,9 @@ public class StorageService {
     public Storage findByKey(String key) {
         return this.storageDao.findByKey(key);
     }
+
+    @Transactional
+    public Storage findById(String id) {
+        return this.storageDao.findById(id).get();
+    }
 }

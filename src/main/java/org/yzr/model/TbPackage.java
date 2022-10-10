@@ -1,5 +1,6 @@
 package org.yzr.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,7 +12,8 @@ public class TbPackage implements Serializable {
 
     private String buildVersion;
 
-    private String buildId;
+    @TableField("bundleid")
+    private String bundleId;
 
     private Long createTime;
 

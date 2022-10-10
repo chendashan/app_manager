@@ -1,12 +1,14 @@
 package org.yzr.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +17,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.yzr.backend.common.R;
-import org.yzr.model.App;
+import org.yzr.model.*;
 import org.yzr.model.Package;
-import org.yzr.model.Storage;
-import org.yzr.model.User;
 import org.yzr.service.*;
 import org.yzr.storage.StorageUtil;
 import org.yzr.utils.file.PathManager;
@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -262,7 +263,7 @@ public class PackageController {
     }
 
     @RequiresPermissions("/apps/get")
-    @GetMapping("/dish/page")
+    @GetMapping("/dish/page/1")
     @ResponseBody
     public R<Page<PackageViewModel>> getAppList(HttpServletRequest request) {
 
@@ -272,6 +273,37 @@ public class PackageController {
         Page<PackageViewModel> pageInfo = new Page<>(1, 10);
         pageInfo.setRecords(packageList);
         return R.success(pageInfo);
+    }
+
+    @RequiresPermissions("/apps/get")
+    @GetMapping("/dish/page")
+    @ResponseBody
+    public R<Page> getPackagePage(int page, int pageSize, String name, HttpServletRequest request) {
+        String httpURL = PathManager.request(request).getBaseURL();
+        Page<TbPackage> packagePage = new Page<>(page, pageSize);
+        Page<PackageViewModel> voPage = new Page<>();
+
+        LambdaQueryWrapper<TbPackage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(name != null, TbPackage::getName, name);
+        lambdaQueryWrapper.orderByDesc(TbPackage::getCreateTime);
+        tbPackageService.page(packagePage, lambdaQueryWrapper);
+
+        BeanUtils.copyProperties(packagePage, voPage, "records");
+
+        List<PackageViewModel> pvoList = new ArrayList<>();
+        for (TbPackage tbPackage : packagePage.getRecords()) {
+            PackageViewModel packageViewModel = new PackageViewModel(tbPackage);
+            Storage storage = storageService.findById(tbPackage.getIconFileId());
+            if (storage != null) {
+                String iconUrl = httpURL + "/fetch/" + storage.getKey();
+                packageViewModel.setIconURL(iconUrl);
+            }
+            pvoList.add(packageViewModel);
+        }
+        voPage.setRecords(pvoList);
+
+        return R.success(voPage);
+
     }
 
 }
