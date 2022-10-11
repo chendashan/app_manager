@@ -32,7 +32,7 @@
         <div class="sidebar-container">
           <div class="logo">
             <!-- <img src="images/logo.png" width="122.5" alt="" /> -->
-            <!-- <img src="../images/favicon.ico" alt="" style="width: 32px; height: 32px" /> -->
+            <img src="../images/upload.png" alt="" style="width: 32px; height: 24px; cursor: pointer" @click="goHome"/>
           </div>
 
           <el-scrollbar wrap-class="scrollbar-wrapper">
@@ -163,19 +163,22 @@
         },
         methods: {
           logout() {
-            logoutApi().then((res)=>{
-              if(res.code === 1){
+            logoutApi().then((res) => {
+              if (res.code === 1) {
                 localStorage.removeItem('userInfo')
                 window.location.href = '/backend/page/login/login.html'
               }
             })
           },
+          goHome() {
+            window.location.href = '/apps'
+          },
           goBack() {
             // window.location.href = 'javascript:history.go(-1)'
-            const menu = this.menuList.find(item=>item.id===this.menuActived)
+            const menu = this.menuList.find(item => item.id === this.menuActived)
             // this.goBackFlag = false
             // this.headTitle = menu.name
-            this.menuHandle(menu,false)
+            this.menuHandle(menu, false)
           },
           menuHandle(item, goBackFlag) {
             this.loading = true
