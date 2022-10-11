@@ -1151,13 +1151,40 @@ body {
     top:0;
     left:0;
     bottom:0;
-    right:0;
-    z-index:-1;
+    right: 0;
+    z-index: -1;
 }
+
 .guide > img {
     width: auto;
     height: auto;
     max-width: 100%;
     max-height: 100%;
-    border:0;
+    border: 0;
+}
+
+.right-menu {
+    float: right;
+    display: flex;
+    margin-right: 20px;
+    height: 100%;
+}
+
+.name-title {
+    font-size: 20px;
+    color: #000;
+}
+
+.logout {
+    float: right;
+    font-size: 12px;
+    color: #9b9b9b;
+    bottom: 13px;
+    cursor: pointer;
+}
+
+.manager_title {
+    font-size: 20px;
+    color: #9B9B9B;
+    margin-right: 40px;
 }

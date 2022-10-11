@@ -1,6 +1,5 @@
 package org.yzr.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -10,14 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yzr.backend.common.R;
+import org.yzr.model.DtoUser;
 import org.yzr.model.User;
 import org.yzr.service.AppService;
 import org.yzr.utils.file.PathManager;
 import org.yzr.utils.response.BaseResponse;
 import org.yzr.utils.response.ResponseUtil;
 import org.yzr.vo.AppViewModel;
-import org.yzr.vo.PackageViewModel;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +39,8 @@ public class AppController {
             request.setAttribute("apps", apps);
             request.setAttribute("baseURL", PathManager.request(request).getBaseURL());
             request.setAttribute("token", user.getToken());
+            DtoUser dtoUser = new DtoUser(user);
+            request.setAttribute("dtoUser", dtoUser);
         } catch (Exception e) {
             e.printStackTrace();
         }

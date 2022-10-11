@@ -39,13 +39,19 @@
                     </div>
                     <i class="icon-angle-right ng-hide"></i>
                     <div class="navbar-title primary-title">
-                        <span>我的token:[[${token}]]</span>
+                        <!--  <span>我的token:[[${token}]]</span>  -->
                     </div>
                     <i class="icon-angle-right ng-hide"></i>
 
-                    <i class="icon-angle-right ng-hide"></i>
-                    <div class="navbar-title primary-title">
-                        <a class="ng-binding" th:href="${baseURL} + '/backend/index.html'">管理</a>
+
+                    <div class="navbar-header-wrap right-menu">
+                        <div>
+                            <a class="manager_title" th:href="${baseURL} + '/backend/index.html'">管理</a>
+                        </div>
+                        <div>
+                            <div class="name-title">[[${dtoUser.username}]]</div>
+                            <span class="logout" th:href="${baseURL} + '/account/logout'">注销</span>
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -198,6 +204,19 @@
     $(".appname").click(function () {
         window.open($(this).attr("data"))
     });
+    $(".logout").click(function () {
+        var url = "/account/logout";
+        $.ajax({
+            url: url, success: function (result) {
+                if (result.code != 0) {
+                    $.toast({text: result.msg, icon: 'error'});
+                } else {
+                    window.location.href = window.location.href
+                    window.location.reload
+                }
+            }
+        });
+    })
 </script>
 </body>
 
