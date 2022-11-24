@@ -8,4 +8,6 @@ import java.util.List;
 public interface TbPackageService extends IService<TbPackage> {
 
     List<TbPackage> getAllTbPackage();
+
+    Integer getLastPosition();
 }

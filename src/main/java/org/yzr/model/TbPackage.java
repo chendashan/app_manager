@@ -33,4 +33,9 @@ public class TbPackage implements Serializable {
 
     private String sourceFileId;
 
+    @TableField("package_position")
+    private Integer position;
+
+    private String packageExplain;
+
 }

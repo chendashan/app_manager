@@ -38,7 +38,7 @@ public class Package {
     private Storage sourceFile;
     // 图标
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="icon_file_id",referencedColumnName="id")
+    @JoinColumn(name = "icon_file_id", referencedColumnName = "id")
     private Storage iconFile;
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "appId")
@@ -47,6 +47,11 @@ public class Package {
     // Provision 文件
     @JoinColumn(name = "provisionId", referencedColumnName = "id")
     private Provision provision;
+
+    @Column(name = "package_position")
+    private int position;
+
+    private String packageExplain;
 
     public String getId() {
         return id;
@@ -158,5 +163,21 @@ public class Package {
 
     public void setProvision(Provision provision) {
         this.provision = provision;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public String getPackageExplain() {
+        return packageExplain;
+    }
+
+    public void setPackageExplain(String packageExplain) {
+        this.packageExplain = packageExplain;
     }
 }

@@ -56,10 +56,12 @@
                   class="text-black">[[${app.installPath}]]</span></p>
               <div class="release-info">
                 <p>[[${app.currentPackage.type}]] -
-                  <span itemprop="softwareVersion">[[${app.version}]] (Build [[${app.buildVersion}]]) -
+                  <span itemprop="softwareVersion">[[${app.version}]] (Number [[${app.currentPackage.position}]]) -
                     [[${app.currentPackage.displaySize}]]</span></p>
                 <p>更新于: <span itemprop="datePublished">[[${app.currentPackage.displayTime}]]</span></p>
                 <p>[[${app.currentPackage.message}]]</p>
+                <p th:unless="${#strings.isEmpty(app.currentPackage.packageExplain)}">备注:
+                  [[${app.currentPackage.packageExplain}]]</p>
               </div>
               <div class="action-animate">
                 <input id="installURL" th:value="${app.currentPackage.installURL}" style="display: none" />

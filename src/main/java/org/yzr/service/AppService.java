@@ -43,6 +43,9 @@ public class AppService {
     @Resource
     private PackageService packageService;
 
+    @Resource
+    private TbPackageService tbPackageService;
+
     @Transactional
     public App save(App app, User user) {
         user = this.userDao.findById(user.getId()).get();
@@ -165,6 +168,7 @@ public class AppService {
         App app = getApp(user, aPackage);
         // 3. 更新包信息
         aPackage.setApp(app);
+        aPackage.setPosition(tbPackageService.getLastPosition() + 1);
         // 4. 更新包信息
         aPackage = this.packageDao.save(aPackage);
         // 5. 更新app信息

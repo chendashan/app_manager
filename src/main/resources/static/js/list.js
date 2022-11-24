@@ -74,11 +74,13 @@ function getPackageList() {
                 var previewURL = package.previewURL;
                 var id = package.id;
                 var message = package.message;
+                var explain = package.packageExplain;
+                var position = package.position;
                 packageList += '<li class="package_index_' + id + '">';
                 packageList += '<div>';
                 packageList += '<div class="directive-view-release">';
                 packageList += '<i class="icon-upload-cloud2"></i>';
-                packageList += '<b class="ng-binding">' + version + ' (Build ' + buildVersion + ')' + message + '</b > ';
+                packageList += '<b class="ng-binding">' + version + ' (Number ' + position + ')' + message + '</b > ';
                 packageList += '<div class="release-metainfo ng-hide">';
                 packageList += '<small><i class="icon-calendar"></i>';
                 packageList += '<span class="ng-binding">' + displayTime + '</span>';
@@ -91,6 +93,9 @@ function getPackageList() {
                 packageList += '<i class="ng-hide">&nbsp;&nbsp;·&nbsp;&nbsp;</i>';
                 packageList += '<small class="ng-binding ng-hide"></small>';
                 packageList += '</div>';
+                if (explain !== null && explain !== "") {
+                    packageList += '<span class="ng-binding">' + explain + '</span>';
+                }
                 packageList += '<div class="release-actions">';
                 packageList += '<button class="tooltip-top download-action" tooltip="下载原文件" value="' + downloadURL + '">';
                 packageList += '<i class="icon-cloud-download"></i>';

@@ -77,6 +77,15 @@ const dishStatusByStatus = (params) => {
   return $axios({
     url: `/dish/status/${params.status}`,
     method: 'post',
-    params: { ids: params.id }
+    params: {ids: params.id}
+  })
+}
+
+// 修改接口
+const editCategory = (params) => {
+  return $axios({
+    url: '/dish/update',
+    method: 'post',
+    data: {...params}
   })
 }

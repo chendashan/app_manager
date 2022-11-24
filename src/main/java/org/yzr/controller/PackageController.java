@@ -276,6 +276,16 @@ public class PackageController {
     }
 
     @RequiresPermissions("/apps/get")
+    @PostMapping("/dish/update")
+    @ResponseBody
+    public R<Boolean> updatePackage(@RequestBody Package pack) {
+        TbPackage tbPackage = tbPackageService.getById(pack.getId());
+        tbPackage.setPackageExplain(pack.getPackageExplain());
+        tbPackageService.updateById(tbPackage);
+        return R.success(true);
+    }
+
+    @RequiresPermissions("/apps/get")
     @GetMapping("/dish/page")
     @ResponseBody
     public R<Page> getPackagePage(int page, int pageSize, String name, HttpServletRequest request) {
@@ -285,7 +295,7 @@ public class PackageController {
 
         LambdaQueryWrapper<TbPackage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.like(name != null, TbPackage::getName, name);
-        lambdaQueryWrapper.orderByDesc(TbPackage::getCreateTime);
+        lambdaQueryWrapper.orderByAsc(TbPackage::getCreateTime);
         tbPackageService.page(packagePage, lambdaQueryWrapper);
 
         BeanUtils.copyProperties(packagePage, voPage, "records");

@@ -39,6 +39,10 @@ public class PackageViewModel {
     private String message;
     private String iconKey;
 
+    private int position;
+
+    private String packageExplain;
+
     public PackageViewModel(Package aPackage, HttpServletRequest request) {
         String httpURL = PathManager.request(request).getBaseURL();
         String httpsURL = PathManager.request(request).useHttps().getBaseURL();
@@ -105,6 +109,8 @@ public class PackageViewModel {
             this.iconURL = httpsURL + "/fetch/" + aPackage.getIconFile().getKey();
         } catch (Exception e) {
         }
+        this.packageExplain = aPackage.getPackageExplain();
+        this.position = aPackage.getPosition();
     }
 
     public PackageViewModel(TbPackage aPackage) {
@@ -124,6 +130,8 @@ public class PackageViewModel {
         } else if (aPackage.getPlatform().equals("android")) {
             this.iOS = false;
         }
+        this.packageExplain = aPackage.getPackageExplain();
+        this.position = aPackage.getPosition();
 
         try {
             //this.iconURL = httpsURL + "/fetch/" + aPackage.getIconFile().getKey();
@@ -209,5 +217,21 @@ public class PackageViewModel {
 
     public String getIconKey() {
         return iconKey;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public String getPackageExplain() {
+        return packageExplain;
+    }
+
+    public void setPackageExplain(String packageExplain) {
+        this.packageExplain = packageExplain;
     }
 }

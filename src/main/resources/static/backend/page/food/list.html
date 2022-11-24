@@ -41,20 +41,25 @@
         </div>
       </div>
       <el-table
-        :data="tableData"
-        stripe
-        class="tableBox"
-        @selection-change="handleSelectionChange"
+              :data="tableData"
+              stripe
+              class="tableBox"
+              @selection-change="handleSelectionChange"
       >
         <el-table-column
-          type="selection"
-          width="25"
+                type="selection"
+                width="25"
         ></el-table-column>
         <el-table-column
-          prop="name"
-          label="名称"
+                prop="position"
+                label="序号"
+                width="60"
         ></el-table-column>
-        <el-table-column prop="image" label="图片" align="center">
+        <el-table-column
+                prop="name"
+                label="名称"
+        ></el-table-column>
+        <el-table-column prop="image" label="图片">
           <template slot-scope="{ row }">
             <el-image style="width: auto; height: 40px; border:none;cursor: pointer;"
                       :src="row.iconURL"
@@ -75,24 +80,32 @@
           </template>
         </el-table-column>
         <el-table-column
-            prop="displaySize"
-            label="大小">
+                prop="displaySize"
+                label="大小">
         </el-table-column>
         <el-table-column
-          prop="displayTime"
-          label="发布时间"
+                prop="displayTime"
+                label="发布时间"
         >
         </el-table-column>
+
         <el-table-column
-          label="操作"
-          width="160"
-          align="center"
+                prop="packageExplain"
+                label="备注"
+        >
+        </el-table-column>
+
+        <el-table-column
+                label="操作"
+                width="160"
+                align="center"
         >
           <template slot-scope="scope">
             <el-button
-              type="text"
-              size="small"
-              class="blueBug"
+                    type="text"
+                    size="small"
+                    class="blueBug"
+                    @click="editHandle(scope.row)"
             >
               修改
             </el-button>
@@ -108,17 +121,57 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        class="pageList"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="counts"
-        @size-change="handleSizeChange"
-        :current-page.sync="page"
-        @current-change="handleCurrentChange"
+              class="pageList"
+              :page-sizes="[10, 20, 30, 40]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="counts"
+              @size-change="handleSizeChange"
+              :current-page.sync="page"
+              @current-change="handleCurrentChange"
       ></el-pagination>
     </div>
-  </div>
+     <el-dialog
+             :title="classData.title"
+             :visible.sync="classData.dialogVisible"
+             width="30%"
+             :before-close="handleClose"
+     >
+       <el-form
+               class="demo-form-inline"
+               label-width="100px"
+       >
+         <el-form-item label="备注：">
+           <el-input
+                   v-model="classData.explain"
+                   placeholder="请输入备注"
+                   maxlength="14"
+           />
+         </el-form-item>
+       </el-form>
+       <span
+               slot="footer"
+               class="dialog-footer"
+       >
+        <el-button
+                size="medium"
+                @click="classData.dialogVisible = false"
+        >取 消</el-button>
+        <el-button
+                type="primary"
+                size="medium"
+                @click="submitForm()"
+        >确 定</el-button>
+        <el-button
+                v-if="action != 'edit'"
+                type="primary"
+                size="medium"
+                class="continue"
+                @click="submitForm('go')"
+        > 保存并继续添加 </el-button>
+      </span>
+     </el-dialog>
+   </div>
     <!-- 开发环境版本，包含了有帮助的命令行警告 -->
     <script src="../../plugins/vue/vue.js"></script>
     <!-- 引入组件库 -->
@@ -132,13 +185,19 @@
         el: '#food-app',
         data() {
           return {
-             input: '',
-             counts: 0,
-             page: 1,
-             pageSize: 10,
-             tableData : [],
-             dishState : '',
-             checkList: []
+            input: '',
+            counts: 0,
+            page: 1,
+            pageSize: 10,
+            tableData: [],
+            dishState: '',
+            checkList: [],
+            classData: {
+              'title': '修改备注',
+              'dialogVisible': false,
+              'id': '',
+              'explain': ''
+            }
           }
         },
         computed: {},
@@ -177,18 +236,46 @@
                 id: '4',
                 url: '/backend/page/food/add.html',
                 name: '添加菜品'
-              },true)
+              }, true)
             } else {
               window.parent.menuHandle({
                 id: '4',
-                url: '/backend/page/food/add.html?id='+st,
+                url: '/backend/page/food/add.html?id=' + st,
                 name: '修改菜品'
-              },true)
+              }, true)
             }
           },
+          editHandle(dat) {
+            this.classData.title = '修改备注'
+            this.action = 'edit'
+            this.classData.explain = dat.packageExplain
+            this.classData.id = dat.id
+            this.classData.dialogVisible = true
+          },
+          //数据提交
+          submitForm(st) {
+            const classData = this.classData
+            const valid = (classData.explain === 0 || classData.explain)
+            if (valid) {
 
+              editCategory({'id': this.classData.id, 'packageExplain': this.classData.explain}).then(res => {
+                if (res.code === 1) {
+                  this.$message.success('修改成功！')
+                  this.classData.dialogVisible = false
+                  this.handleQuery()
+                } else {
+                  this.$message.error(res.msg || '操作失败')
+                }
+              }).catch(err => {
+                this.$message.error('请求出错了：' + err)
+              })
+
+            } else {
+              this.$message.error('请输入分类名称或排序')
+            }
+          },
           // 删除
-          deleteHandle (type, id) {
+          deleteHandle(type, id) {
             if (type === '批量' && id === null) {
               if (this.checkList.length === 0) {
                 return this.$message.error('请选择删除对象')
